@@ -1,8 +1,18 @@
 import { NextResponse } from "next/server";
 import prisma from "../../../../lip/prisma";
 
-export async function GET() {
-  const userData = await prisma.users.findMany();
+// GET method
+export async function GET(request) {
+  const url = new URL(request.url);
+  const name = url.searchParams.get("name");
+  const userData = await prisma.users.findMany({
+    where: {
+      name: {
+        contains: name,
+        mode: "insensitive",
+      },
+    },
+  });
 
   return NextResponse.json({
     status: 200,
@@ -11,6 +21,7 @@ export async function GET() {
   });
 }
 
+// POST method
 export async function POST(request) {
   const { name, email } = await request.json();
   const addUser = await prisma.users.create({
@@ -23,6 +34,6 @@ export async function POST(request) {
   return NextResponse.json({
     status: 201,
     message: "POST new user successfully!",
-    payload: addUser
+    payload: addUser,
   });
 }

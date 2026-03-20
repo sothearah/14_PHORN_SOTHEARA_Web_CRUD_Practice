@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import prisma from "../../../../../lip/prisma";
 
-// params must come with is
+// params must come with s
 // GET by ID
 export async function GET(_, { params }) {
   const { id } = await params;
@@ -35,16 +35,16 @@ export async function DELETE(_, { params }) {
 // PUT by Id
 export async function PUT(request, { params }) {
   const { name, email } = await request.json();
-  const {id} = await params;
+  const { id } = await params;
   const updateUser = await prisma.users.update({
-    data: {name, email}, 
+    data: { name, email },
     where: {
-        id: parseInt(id)
-    }
+      id: parseInt(id),
+    },
   });
   return NextResponse.json({
-    status: 200, 
+    status: 200,
     message: `UPDATE user id: ${id} successfully!`,
-    payload: updateUser
+    payload: updateUser,
   });
 }
